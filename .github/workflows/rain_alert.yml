@@ -1,4 +1,4 @@
-name: Rain Alert
+name: Rain Alert test
 
 on:
   schedule:
