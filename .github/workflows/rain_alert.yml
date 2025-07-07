@@ -25,4 +25,4 @@ jobs:
           python rain_alert.py
         env:   # ← これを追加！
           OWM_API_KEY: ${{ secrets.OWM_API_KEY }}
-          PB_TOKEN: ${{ secrets.PB_TOKEN }}
+          PB_TOKEN: ${{ secrets.PB_TOKEN }}# Dummy Update
