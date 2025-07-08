@@ -1,9 +1,9 @@
 name: Rain Alert test
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 7 * * *'
-  workflow_dispatch:
 
 jobs:
   run-rain-alert:
@@ -21,8 +21,8 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run rain alert
+        run: |
+          python rain_alert.py
         env:
           OWM_API_KEY: ${{ secrets.OWM_API_KEY }}
           PB_TOKEN: ${{ secrets.PB_TOKEN }}
-        run: |
-          python rain_alert.py
