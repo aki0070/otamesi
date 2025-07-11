@@ -1,3 +1,4 @@
+import sys
 import requests
 import json
 
@@ -18,8 +19,14 @@ def get_weather_data(api_key, city_name):
 
 if __name__== "__main__":
     API_KEY = "1176ea5c7874e74eb868737dfaa11624"
-    CITY = "Tokyo"
-
+    # コマンドラインから都市名が与えられたかチェック
+    if len(sys.argv) > 1:
+    #引数があれば、eそれを都市名としてつかう(sys.argv[1])
+        CITY = sys.argv[1]
+    else:
+        #引数がなければ、デフォルトの都市をつかう。
+        CITY ="matsuyama"
+    print(f"---{CITY}の天気を検索します---")
     weather_data = get_weather_data(API_KEY, CITY)
 
     if weather_data:
