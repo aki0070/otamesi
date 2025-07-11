@@ -1,8 +1,11 @@
 import sys
 import requests
 import json
+import argparse
+
 
 def get_weather_data(api_key, city_name):
+    #指定された都市の天気データを取得して返すa関数
     url = f"http://api.openweathermap.org/data/2.5/weather?q={city_name}&appid={api_key}&units=metric&lang=ja"
 
     try:
@@ -18,15 +21,17 @@ def get_weather_data(api_key, city_name):
         return None
 
 if __name__== "__main__":
+    #１．パーサー（因数解析器）を作成
+    parser = argparse.ArgumentParser(description="指定された都市の現在の天気を表示します。")
+    #２.受け付ける因数を定義
+    parser.add_argument("--city", default="Matsuyama", help="天気を表示する都市名（例：Tokyo)")
+    #　３．実際に因数を解析
+    args = parser.parse_args() 
+
     API_KEY = "1176ea5c7874e74eb868737dfaa11624"
-    # コマンドラインから都市名が与えられたかチェック
-    if len(sys.argv) > 1:
-    #引数があれば、eそれを都市名としてつかう(sys.argv[1])
-        CITY = sys.argv[1]
-    else:
-        #引数がなければ、デフォルトの都市をつかう。
-        CITY ="matsuyama"
-    print(f"---{CITY}の天気を検索します---")
+    CITY = args.city #　解析した因数から都市名を取得
+
+    print(f"---{CITY}の天気を検索します ---")
     weather_data = get_weather_data(API_KEY, CITY)
 
     if weather_data:
@@ -39,4 +44,3 @@ if __name__== "__main__":
         except KeyError:
 
             print("エラー: レスポンスからデータを読み取れませんでした。")
-
