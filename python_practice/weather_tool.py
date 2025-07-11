@@ -1,8 +1,11 @@
+import os
 import sys
 import requests
 import json
 import argparse
-
+from dotenv import load_dotenv
+# .envファイルから環境変数を組み込む
+load_dotenv()
 
 def get_weather_data(api_key, city_name):
     #指定された都市の天気データを取得して返すa関数
@@ -15,12 +18,17 @@ def get_weather_data(api_key, city_name):
     except requests.exceptions.RequestException as e:
         print(f"エラー: APIリクエストに失敗 - {e}")
         return None
-
     except json.JSONDecodeError:
         print("エラー: レスポンスの解析に失敗。")
         return None
 
 if __name__== "__main__":
+    # .envファイルからAPIキーを読み込む
+    API_KEY = os.getenv("OPENWEATHER_API_KEY")
+    # APIキーが設定eeされているか確認
+    if not API_KEY:
+        print("エラー: APIキーが.envファイルに設定されていません。")
+        sys.exit(1) # プログラムを終了
     #１．パーサー（因数解析器）を作成
     parser = argparse.ArgumentParser(description="指定された都市の現在の天気を表示します。")
     #２.受け付ける因数を定義
@@ -28,8 +36,7 @@ if __name__== "__main__":
     #　３．実際に因数を解析
     args = parser.parse_args() 
 
-    API_KEY = "1176ea5c7874e74eb868737dfaa11624"
-    CITY = args.city #　解析した因数から都市名を取得
+    CITY = args.city
 
     print(f"---{CITY}の天気を検索します ---")
     weather_data = get_weather_data(API_KEY, CITY)
