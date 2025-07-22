@@ -1,7 +1,7 @@
 import random #　乱数生成ライブラリ
 
-print("---数当てeeゲームへようこそ！---")
-print("１から10の数をe当ててみてね。")
+print("---数当てゲームへようこそ！---")
+print("１から10の数を当ててみてね。")
 
 secret_number = random.randint(1,10)
 guess = 0 #　ユーザーの数字を初期化（初回は０aなので条件はTRUEになる）
