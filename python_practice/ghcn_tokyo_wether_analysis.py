@@ -53,3 +53,42 @@ print(df_tmax.info())
 # 統計情報を表示
 print("\n--- 東京の最高気温データ統計 ---")
 print(df_tmax.describe())
+
+# 最高気温 (TMAX) のデータだけを抽出する
+df_tmax = df_raw_weather[df_raw_weather['Element'] == 'TMAX'].copy() 
+
+# 必要な列 (日付と値) だけに絞る
+df_tmax = df_tmax[['Date', 'Value']]
+
+# 日付列を日付型に変換する ('YYYYMMDD'形式)
+df_tmax['Date'] = pd.to_datetime(df_tmax['Date'], format='%Y%m%d')
+
+# 気温の値 (Value) を摂氏の10分の1単位から摂氏に戻す
+df_tmax['Value'] = df_tmax['Value'] / 10 
+
+# 列名をより分かりやすく変更
+df_tmax.rename(columns={'Value': 'Max_Temp_Celsius'}, inplace=True)
+
+# 日付をインデックスに設定する（時系列データ分析の基本）
+df_tmax.set_index('Date', inplace=True)
+
+# ↓↓↓ ここから追加：年単位の平均を計算します ↓↓↓
+# 年単位でグループ化し、Max_Temp_Celsiusの平均を計算
+df_tmax_yearly = df_tmax['Max_Temp_Celsius'].resample('Y').mean().to_frame()
+
+# 列名を変更（より明確に）
+df_tmax_yearly.rename(columns={'Max_Temp_Celsius': 'Yearly_Max_Temp_Celsius'}, inplace=True)
+
+# 読み込んだデータの最初の5行と最後の5行を表示して確認
+print("\n--- 東京の年ごとの最高気温データ (先頭) ---")
+print(df_tmax_yearly.head())
+print("\n--- 東京の年ごとの最高気温データ (末尾) ---")
+print(df_tmax_yearly.tail())
+
+# データの情報（欠損値の有無、データ型、期間など）を表示して確認
+print("\n--- 東京の年ごとの最高気温データ情報 ---")
+print(df_tmax_yearly.info())
+
+# 統計情報を表示
+print("\n--- 東京の年ごとの最高気温データ統計 ---")
+print(df_tmax_yearly.describe())

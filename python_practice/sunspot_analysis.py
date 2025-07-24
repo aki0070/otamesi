@@ -37,3 +37,36 @@ print(df_sunspot.info())
 # 統計情報を表示
 print("\n--- 太陽黒点データ統計 ---")
 print(df_sunspot.describe())
+
+# 黒点数がNaN（欠損値）の行を削除する (観測がない期間は分析から除外)
+df_sunspot = df_raw_sunspot.dropna(subset=['Sunspot_Number']).copy()
+
+# 日付列 (YearとMonth) を結合して日付型に変換する
+df_sunspot['Date'] = pd.to_datetime(df_sunspot['Year'].astype(str) + '-' + df_sunspot['Month'].astype(str) + '-01')
+
+# 日付をインデックスに設定する（時系列データ分析の基本）
+df_sunspot.set_index('Date', inplace=True)
+
+# 必要な列 (Sunspot_Number) だけに絞る
+df_sunspot = df_sunspot[['Sunspot_Number']]
+
+# ↓↓↓ ここから追加：年単位の平均を計算します ↓↓↓
+# 年単位でグループ化し、Sunspot_Numberの平均を計算
+df_sunspot_yearly = df_sunspot['Sunspot_Number'].resample('Y').mean().to_frame()
+
+# 列名を変更（より明確に）
+df_sunspot_yearly.rename(columns={'Sunspot_Number': 'Yearly_Sunspot_Number'}, inplace=True)
+
+# 読み込んだデータの最初の5行と最後の5行を表示して確認
+print("\n--- 太陽黒点の年ごとのデータ (先頭) ---")
+print(df_sunspot_yearly.head())
+print("\n--- 太陽黒点データ (末尾) ---")
+print(df_sunspot_yearly.tail())
+
+# データの情報（欠損値の有無、データ型、期間など）を表示して確認
+print("\n--- 太陽黒点データ情報 ---")
+print(df_sunspot_yearly.info())
+
+# 統計情報を表示
+print("\n--- 太陽黒点データ統計 ---")
+print(df_sunspot_yearly.describe())
